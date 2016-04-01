@@ -4,20 +4,22 @@
 
 #define EPSILON 0.00000001
 
-double** aloca_matriz(int l, int c);
-void imprime_matriz(double **m, int l, int c);
-void desaloca_matriz(double  **m, int l);
+double** alocaMatriz(int l, int c);
+void imprimeMatriz(double **m, int l, int c);
+void desalocaMatriz(double  **m, int l);
 
 int main()
 {
-    double** c = aloca_matriz(5, 5);
+    double** c = alocaMatriz(5, 5);
 
-    desaloca_matriz(c, 5);
+    desalocaMatriz(c, 5);
 
     return 0;
 }
 
-void imprime_matriz(double **m, int l, int c) {
+// Funcoes genericos de manipulação de matrizes
+
+void imprimeMatriz(double **m, int l, int c) {
     int i, j;
 
     for (i = 0; i < l; i++){
@@ -29,7 +31,7 @@ void imprime_matriz(double **m, int l, int c) {
     }
 }
 
-double** aloca_matriz(int l, int c) {
+double** alocaMatriz(int l, int c) {
     /*
      * Se houver memoria disponivel, alocal uma matriz com
      * de tamanho l por c. E devolve o endereco
@@ -62,7 +64,8 @@ double** aloca_matriz(int l, int c) {
     return m;
 }
 
-void desaloca_matriz(double **m, int l) {
+void desalocaMatriz(double **m, int l)
+{
     /*
      * Desaloca uma matriz previamente alocada
      * com a função aloca_matriz.
@@ -78,4 +81,10 @@ void desaloca_matriz(double **m, int l) {
 
         free(m);
     }
+}
+
+// Funcoes para implementar o metodo da pivotacao completa.
+
+void lerMatrizDoArquivo(char *filename) {
+
 }
