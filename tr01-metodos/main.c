@@ -31,33 +31,88 @@ int main()
 void pivotacao(double **m, int n)
 {
 
-    // Esta função implementa o metodo da pivotação completa
+    /*
+     * Esta função implementa o metodo da pivotação completa
+     *
+     * Parametros:
+     * **m : uma ponteiro para uma matriz de doubles
+     * n   : tamanho da matriz m
+     *
+     * Variaveis:
+     * i, j, k : contadores
+     *
+     * maior   : maior elemento em uma linha pivotal
+     * lm      : linha do maior elemento em uma linha pivotal
+     * cm      : coluna do maior elemento de uma linha pivotal
+     *
+     * *aux    : ponteiro para uma linha da matriz estentendida m
+     *
+     * mult    : multiplicador a ser usado nas linhas a serem pivotadas
+     *
+     */
 
     int i, j, k;
-    int indicePivo;
+
+
+
+    double maior = m[0][0];
+    int lm = 0;
+    int cm = 0;
+
+    double *aux;
+
     double mult;
 
     for (i = 0; i < n; i++)
     {
+        maior = fabs(m[i][0]);
+        lm = i;
+        cm = 0;
 
-        indicePivo = procuraMaior(m[i], n);
+        //Procura o maior elemento das linhas ainda
+        //não pivotadas da matriz de coeficientes.
 
-        if (fabs(m[i][indicePivo]) > EPSILON)
+        for (j = i; j < n; j++)
         {
-            for (j = i + 1; j < n; j++)
+            for(k = 0; k < n; k++)
             {
-                mult = - m[j][indicePivo]/m[i][indicePivo];
-                m[j][indicePivo] = 0;
-
-                for (k = 0; k<=n; k++)
+                if (fabs(m[j][k]) > fabs(maior))
                 {
-                    if (k != indicePivo)
-                    {
-                        m[j][k] += m[i][k] * mult;
-                    }
+                    maior = m[j][k];
+                    lm = j;
+                    cm = k;
                 }
             }
         }
+
+        //Troca a linha i com a linha do maior.
+
+        aux   = m[i];
+        m[i]  = m[lm];
+        m[lm] = aux;
+
+        lm = i;
+
+        //Realiza a pivotação das linhas abaixo da linha i
+
+        for(j = i+1; j < n; j++)
+        {
+            mult = -m[j][cm] / m[lm][cm];
+            m[j][cm] = 0;
+
+            for(k = 0; k <= n; k++)
+            {
+                if(k != cm)
+                {
+                    m[j][k] += m[lm][k] * mult;
+                }
+            }
+        }
+
+        printf("pivot = %10.8lf\n", maior);
+        imprimeMatriz(m, n, n+1);
+        printf("\n");
+
     }
 }
 
