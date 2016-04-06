@@ -8,27 +8,30 @@ double** alocaMatriz(int l, int c);
 void imprimeMatriz(double **m, int l, int c);
 void desalocaMatriz(double  **m, int l);
 
-void pivotacao(double **m, int n);
+void pivotacao(double **m, int n,int v[]);
 int procuraMaior(double *m, int tam);
 void inicializaMatrizDoArquivo(char *filename, double **m);
+int* alocaVetorPosicaoColunas(int n);
+int sretro(double **m,int n,double x[]);
 
 int main()
 {
-    int tam = obtemTamanhoMatriz("numbers.txt");
+    int tam = obtemTamanhoMatriz("numbers2.txt");
     double **m = alocaMatriz(tam, tam + 1);
+    int *v = alocaVetorPosicaoColunas(tam);
 
-    inicializaMatrizDoArquivo("numbers.txt", m);
-    imprimeMatriz(m, tam, tam + 1);
+    inicializaMatrizDoArquivo("numbers2.txt", m);
+    //imprimeMatriz(m, tam, tam + 1);
 
     printf("\n\n\n");
 
-    pivotacao(m, tam);
+    pivotacao(m, tam,v);
     imprimeMatriz(m, tam, tam + 1);
 
     return 0;
 }
 
-void pivotacao(double **m, int n)
+void pivotacao(double **m, int n,int v [])
 {
 
     /*
@@ -58,8 +61,12 @@ void pivotacao(double **m, int n)
     double maior = m[0][0];
     int lm = 0;
     int cm = 0;
+    int lt = 0;
+    int p = 0;
 
     double *aux;
+
+    double aux_troca;
 
     double mult;
 
@@ -93,6 +100,7 @@ void pivotacao(double **m, int n)
 
         lm = i;
 
+
         //Realiza a pivotação das linhas abaixo da linha i
 
         for(j = i+1; j < n; j++)
@@ -109,13 +117,79 @@ void pivotacao(double **m, int n)
             }
         }
 
-        printf("pivot = %10.8lf\n", maior);
-        imprimeMatriz(m, n, n+1);
+        //printf("pivot = %10.8lf\n", maior);
+        //imprimeMatriz(m, n, n+1);
         printf("\n");
 
+        if(i!=cm){
+            for(lt=0;lt<n;lt++){
+                aux_troca  = m[lt][cm];
+                m[lt][cm] = m[lt][i];
+                m[lt][i]  = aux_troca;
+            }
+
+            v[i] = cm;
+
+        }
     }
+
+    resolveMatrizTS(m,n,v);
 }
 
+int sretro(double **m,int n,double x[]){
+    /*Resolve um SL TS com n variaveis cuja matriz aumentada e m.
+    * Se o SL for determinado, x recebe a soluсao do SL e a funсao devolve 0;
+    * Se for indeterminado x recebe uma das infinitas soluушes do SL e a funсao devolve 1;
+    * Se for incompativel a funсao devolve 2;
+    */
+
+    int i,k, tipo=0;
+    double soma;
+
+    for(i=n-1;i>=0;i--){
+        soma =0;
+        for(k=i+1;k<n;k++){
+            soma += m[i][k]*x[k];
+        }
+
+        if(fabs(m[i][i])<EPSILON){
+
+          if(fabs(m[i][n]-soma)<EPSILON){
+                /*x[i] e variрvel livre*/
+                x[i]=0;
+                tipo = 1;
+            }else{
+                return 2; /*SL incompatьvel*/
+            }
+        }else{
+            x[i]=(m[i][n]-soma)/m[i][i];
+        }
+    }
+    return tipo;
+}/*Fim sretro*/
+
+void resolveMatrizTS(double **m,int n, int v []){
+    double *x;
+
+    int tipo,i;
+
+    x = malloc(sizeof(double)*n);
+    if(x==NULL){
+        printf("Erro ao alocar Matriz. Falta de memoria!\n");
+        return 1;
+    }
+
+    tipo = sretro(m,n,x);
+
+    printf("O SL e %s\n", tipo==0?"Determinado":tipo==1?"Indeterminado":"Incompativel");
+
+    if(tipo!=2){
+        for(i=0;i<n;i++){
+            printf("x[%d] = %10.3lf ", v[i]+1,x[i]);
+        }
+        printf("\n\n");
+    }
+}
 
 int procuraMaior(double *m, int tam)
 {
@@ -240,6 +314,11 @@ double** alocaMatriz(int l, int c)
     return m;
 }
 
+int* alocaVetorPosicaoColunas(int n){
+     int *v = malloc(sizeof(int) * n);
+     return v;
+}
+
 void desalocaMatriz(double **m, int l)
 {
     /*
@@ -259,4 +338,6 @@ void desalocaMatriz(double **m, int l)
 
         free(m);
     }
+
 }
+
