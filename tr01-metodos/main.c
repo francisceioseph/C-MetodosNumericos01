@@ -16,11 +16,11 @@ int sretro(double **m,int n,double x[]);
 
 int main()
 {
-    int tam = obtemTamanhoMatriz("numbers2.txt");
+    int tam = obtemTamanhoMatriz("matriz.txt");
     double **m = alocaMatriz(tam, tam + 1);
     int *v = alocaVetorPosicaoColunas(tam);
 
-    inicializaMatrizDoArquivo("numbers2.txt", m);
+    inicializaMatrizDoArquivo("matriz.txt", m);
     //imprimeMatriz(m, tam, tam + 1);
 
     printf("\n\n\n");
@@ -52,23 +52,27 @@ void pivotacao(double **m, int n,int v [])
      *
      * mult    : multiplicador a ser usado nas linhas a serem pivotadas
      *
+     * v       : vetor que armazena as posicoes finais das colunas
      */
 
     int i, j, k;
-
-
 
     double maior = m[0][0];
     int lm = 0;
     int cm = 0;
     int lt = 0;
-    int p = 0;
 
     double *aux;
 
     double aux_troca;
+    int aux_pos;
 
     double mult;
+
+    for(i = 0; i < n; i++)
+    {
+        v[i]= i; //armazena as posicoes finais das colunas
+    }
 
     for (i = 0; i < n; i++)
     {
@@ -121,6 +125,7 @@ void pivotacao(double **m, int n,int v [])
         //imprimeMatriz(m, n, n+1);
         printf("\n");
 
+        //Efetua a troca das colunas
         if(i!=cm){
             for(lt=0;lt<n;lt++){
                 aux_troca  = m[lt][cm];
@@ -128,8 +133,9 @@ void pivotacao(double **m, int n,int v [])
                 m[lt][i]  = aux_troca;
             }
 
-            v[i] = cm;
-
+            aux_pos = v[i];
+            v[i] = v[cm];
+            v[cm] = aux_pos;
         }
     }
 
@@ -186,6 +192,7 @@ void resolveMatrizTS(double **m,int n, int v []){
     if(tipo!=2){
         for(i=0;i<n;i++){
             printf("x[%d] = %10.3lf ", v[i]+1,x[i]);
+
         }
         printf("\n\n");
     }
