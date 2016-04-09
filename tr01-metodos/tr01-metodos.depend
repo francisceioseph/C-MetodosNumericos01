@@ -1,7 +1,8 @@
 # depslib dependency file v1.0
-1459738958 source:c:\users\família\documents\codeblocksprojects\c-metodosnumericos01\tr01-metodos\main.c
+1460238263 source:c:\users\família\documents\codeblocksprojects\c-metodosnumericos01\tr01-metodos\main.c
 	<stdio.h>
 	<stdlib.h>
-	<string.h>
 	<math.h>
+	<string.h>
+	<ctype.h>
 
