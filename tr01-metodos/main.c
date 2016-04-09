@@ -29,7 +29,7 @@ int main()
 void initPivotacao(){
     char namefile[50];
 
-    printf("\tNome do arquivo : ");
+    printf("\n\tNome do arquivo : ");
     scanf("%s",&namefile);
     strcat(namefile,".txt");
 
@@ -40,11 +40,9 @@ void initPivotacao(){
 
         inicializaMatrizDoArquivo(namefile, m);
         //imprimeMatriz(m, tam, tam + 1);
-
-        printf("\n");
-
         pivotacao(m, tam,v);
-        imprimeMatriz(m, tam, tam + 1);
+        resolveMatrizTS(m,tam,v);
+        //imprimeMatriz(m, tam, tam + 1);
         desalocaMatriz(m,tam);
     }else{
         printf("\n\tERRO! Arquivo n\706o existe.\n");
@@ -206,7 +204,7 @@ void pivotacao(double **m, int n,int v [])
         }
     }
 
-    resolveMatrizTS(m,n,v);
+    //resolveMatrizTS(m,n,v);
 }
 
 int sretro(double **m,int n,double x[]){
@@ -263,7 +261,9 @@ void resolveMatrizTS(double **m,int n, int v [])
 
         }
         printf("\n\n");
+        imprimeMatriz(m, n, n + 1);
     }
+
 }
 
 int procuraMaior(double *m, int tam)
