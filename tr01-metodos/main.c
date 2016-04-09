@@ -25,30 +25,6 @@ int main()
     return 0;
 }
 
-
-void initPivotacao(){
-    char namefile[50];
-
-    printf("\n\tNome do arquivo : ");
-    scanf("%s",&namefile);
-    strcat(namefile,".txt");
-
-    if(fileExist(namefile)==1){
-        int tam = obtemTamanhoMatriz(namefile);
-        double **m = alocaMatriz(tam, tam + 1);
-        int *v = alocaVetorPosicaoColunas(tam);
-
-        inicializaMatrizDoArquivo(namefile, m);
-        //imprimeMatriz(m, tam, tam + 1);
-        pivotacao(m, tam,v);
-        resolveMatrizTS(m,tam,v);
-        //imprimeMatriz(m, tam, tam + 1);
-        desalocaMatriz(m,tam);
-    }else{
-        printf("\n\tERRO! Arquivo n\706o existe.\n");
-    }
-}
-
 void menu(){
 
     char opcao;
@@ -94,6 +70,29 @@ void menu(){
 
     printf("\n\tPrograma finalizado.\n");
 
+}
+
+void initPivotacao(){
+    char namefile[50];
+
+    printf("\n\tNome do arquivo : ");
+    scanf("%s",&namefile);
+    strcat(namefile,".txt");
+
+    if(fileExist(namefile)==1){
+        int tam = obtemTamanhoMatriz(namefile);
+        double **m = alocaMatriz(tam, tam + 1);
+        int *v = alocaVetorPosicaoColunas(tam);
+
+        inicializaMatrizDoArquivo(namefile, m);
+        //imprimeMatriz(m, tam, tam + 1);
+        pivotacao(m, tam,v);
+        resolveMatrizTS(m,tam,v);
+        //imprimeMatriz(m, tam, tam + 1);
+        desalocaMatriz(m,tam);
+    }else{
+        printf("\n\tERRO! Arquivo n\706o existe.\n");
+    }
 }
 
 void pivotacao(double **m, int n,int v [])
