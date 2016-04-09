@@ -20,7 +20,7 @@ void initPivotacao();
 void menu();
 int fileExist(char *nomeArquivo);
 
-//Metodos utilizados na Conversao
+//Metodo utilizado na Conversao
 void initConversao();
 
 int main()
