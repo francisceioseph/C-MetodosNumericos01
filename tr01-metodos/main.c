@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
 #define EPSILON 0.00000001
 
@@ -13,22 +14,88 @@ int procuraMaior(double *m, int tam);
 void inicializaMatrizDoArquivo(char *filename, double **m);
 int* alocaVetorPosicaoColunas(int n);
 int sretro(double **m,int n,double x[]);
+void initPivotacao();
+void menu();
+int fileExist(char *nomeArquivo);
 
 int main()
 {
-    int tam = obtemTamanhoMatriz("matriz.txt");
-    double **m = alocaMatriz(tam, tam + 1);
-    int *v = alocaVetorPosicaoColunas(tam);
-
-    inicializaMatrizDoArquivo("matriz.txt", m);
-    //imprimeMatriz(m, tam, tam + 1);
-
-    printf("\n\n\n");
-
-    pivotacao(m, tam,v);
-    imprimeMatriz(m, tam, tam + 1);
+    menu();
 
     return 0;
+}
+
+
+void initPivotacao(){
+    char namefile[50];
+
+    printf("\tNome do arquivo : ");
+    scanf("%s",&namefile);
+    strcat(namefile,".txt");
+
+    if(fileExist(namefile)==1){
+        int tam = obtemTamanhoMatriz(namefile);
+        double **m = alocaMatriz(tam, tam + 1);
+        int *v = alocaVetorPosicaoColunas(tam);
+
+        inicializaMatrizDoArquivo(namefile, m);
+        //imprimeMatriz(m, tam, tam + 1);
+
+        printf("\n");
+
+        pivotacao(m, tam,v);
+        imprimeMatriz(m, tam, tam + 1);
+        desalocaMatriz(m,tam);
+    }else{
+        printf("\n\tERRO! Arquivo n\706o existe.\n");
+    }
+}
+
+void menu(){
+
+    char opcao;
+    int continua = 1;
+
+    while(continua){
+
+        printf("\n\n\t### MENU PRINCIPAL ###\n\n");
+        printf("\tC - Convers\706o\n");
+        printf("\tS - Sistema Linear\n");
+        printf("\tE - Equa\207\706o Alg\202brica\n");
+        printf("\tF - Finalizar\n");
+
+        printf("\n\tEscolha uma op\207\706o: ");
+        scanf(" %c",&opcao);
+        getchar();
+
+        switch( opcao )
+        {
+            case 'c':
+            case 'C':
+
+                 break;
+            case 's':
+            case 'S':
+                 initPivotacao();
+                 break;
+
+            case 'e':
+            case 'E':
+
+                 break;
+            case 'f':
+            case 'F':
+                 continua = 0;
+                 break;
+
+            default:
+                 printf("\n\n\tERRO! Voc\210 digitou uma opera\207\706o inv\240lida.\n");
+                 break;
+            }
+    }
+
+    printf("\n\tPrograma finalizado.\n");
+
 }
 
 void pivotacao(double **m, int n,int v [])
@@ -174,7 +241,8 @@ int sretro(double **m,int n,double x[]){
     return tipo;
 }/*Fim sretro*/
 
-void resolveMatrizTS(double **m,int n, int v []){
+void resolveMatrizTS(double **m,int n, int v [])
+{
     double *x;
 
     int tipo,i;
@@ -187,7 +255,7 @@ void resolveMatrizTS(double **m,int n, int v []){
 
     tipo = sretro(m,n,x);
 
-    printf("O SL e %s\n", tipo==0?"Determinado":tipo==1?"Indeterminado":"Incompativel");
+    printf("\tO SL \202 %s\n\n", tipo==0?"Determinado":tipo==1?"Indeterminado":"Incompativel");
 
     if(tipo!=2){
         for(i=0;i<n;i++){
@@ -261,6 +329,9 @@ int obtemTamanhoMatriz(char *nomeArquivo)
     {
         fscanf(file, "%d", &tam);
         fclose(file);
+    }else{
+        printf("Erro! Arquivo invalido.\n");
+        system ("pause");
     }
 
     return tam;
@@ -346,5 +417,19 @@ void desalocaMatriz(double **m, int l)
         free(m);
     }
 
+}
+
+int fileExist(char *nomeArquivo)
+{
+    int exist = 1;
+
+    FILE *file = fopen(nomeArquivo, "r");
+
+    if (file == NULL)
+    {
+        exist = 0;
+    }
+
+    return exist;
 }
 
