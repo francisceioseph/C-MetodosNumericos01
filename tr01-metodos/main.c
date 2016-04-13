@@ -60,7 +60,7 @@ void menu(){
 
             case 'e':
             case 'E':
-
+                 //adicionar Lagrange aqui
                  break;
             case 'f':
             case 'F':
